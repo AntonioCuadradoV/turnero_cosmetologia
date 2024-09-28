@@ -1,0 +1,12 @@
+.col-3{
+    flex-wrap: wrap;
+}
+
+img{
+    object-fit: cover;
+}
+
+.card-body{
+    height: 13rem;
+}
+
