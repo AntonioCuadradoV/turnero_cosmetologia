@@ -16,7 +16,7 @@ function validarCampo(sesion, horas) {
     }
   }
 
-  alert("La sesion elegida es " + sesion + " y durara " + horas + " hs");
+  console.log("La sesion elegida es " + sesion + " y durara " + horas + " hs");
   return horas;
 }
 
@@ -25,7 +25,7 @@ function calcularCosto() {
   let horas = validarCampo();
   let total = horas * PRECIO;
 
-  alert("El total de la sesion es " + "$" + total);
+  console.log("El total de la sesion es " + "$" + total);
 }
 
 
