@@ -1,21 +1,25 @@
 //Declaro mis objetos
-const articulos = [
+const ARTICULOS = [
   {
+    id: 1,
     imagen: "sada",
     nombre: "Higiene facial",
     precio: 6000,
   },
   {
+    id: 2,
     imagen: "sada",
     nombre: "Limpieza Profunda",
     precio: 8000,
   },
   {
+    id: 3,
     imagen: "sada",
     nombre: "Masaje con piedras calientes",
     precio: 12000,
   },
   {
+    id: 4,
     imagen: "sada",
     nombre: "Masajes descontracturante",
     precio: 10000,
@@ -52,7 +56,7 @@ function validarCampo() {
   }
 
   // busco el nombre del articulo en mi array
-  let articulo = articulos.find(
+  let articulo = ARTICULOS.find(
     (item) => item.nombre.toLowerCase() === sesion.toLowerCase() // no importa si esta en mayusucula o minuscula
   );
 
@@ -70,7 +74,7 @@ function validarCampo() {
         "4) Masajes descontracturante"
     );
 
-    articulo = articulos.find(
+    articulo = ARTICULOS.find(
       (item) => item.nombre.toLowerCase() === sesion.toLowerCase()
     );
   }
@@ -81,7 +85,7 @@ function validarCampo() {
 
 // Calculo el costo de la sesion dependiendo cual se elija
 function calcularCosto(total) {
-  // total va a contener las propiedas hora y articulos
+  // total va a contener las propiedas hora y ARTICULOS
   if (total) {
     let suma = total.horas * total.articulo.precio;
     console.log("El total de la sesion es " + "$" + suma);
@@ -89,12 +93,9 @@ function calcularCosto(total) {
 }
 
 // Creo una functio para que elijan la fecha de la reserva
-function diaDeReserva(fecha) {
-  let reserva = new Date(fecha);
+function diaDeReserva(fechaReserva, horaReserva ) {
+  let reserva = new Date(fechaReserva + 'T' + horaReserva); // paso una cadena unica que incluya el la fecha y hora
   let fechaActual = new Date();
-
-  reserva.setHours(0, 0, 0, 0);
-  fechaActual.setHours(0, 0, 0, 0);
 
   if (reserva >= fechaActual) {
     return true;
@@ -105,14 +106,15 @@ function diaDeReserva(fecha) {
 
 // variables
 let total = validarCampo();
-let reserva = prompt("Ingrese la fecha de la reserva YYYY-MM-DD");
+let fechaReserva = prompt("Ingrese la fecha de la reserva YYYY-MM-DD");
+let horaReserva = prompt("Ingrese la fecha de la reserva HH:MM");
 
 calcularCosto(total);
 
-if (diaDeReserva(reserva)) {
-  console.log("Su reserva seria el dia " + reserva);
+if (diaDeReserva(fechaReserva, horaReserva)) {
+  console.log("Su reserva seria el dia " + fechaReserva + " a las " + horaReserva);
 } else {
   console.log(
-    "La fecha ingresada para la reserva es posterior a la fecha del dia"
+    "La fecha ingresada para la reserva es posterior a la fecha del dia, VUELVA A INTENTARLO"
   );
 }
