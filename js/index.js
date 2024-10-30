@@ -2,119 +2,95 @@
 const ARTICULOS = [
   {
     id: 1,
-    imagen: "sada",
+    imagen: "imagenes/Higiene_facial.jpg",
     nombre: "Higiene facial",
     precio: 6000,
   },
   {
     id: 2,
-    imagen: "sada",
+    imagen: "imagenes/LIMPIEZA_PROFUNDA.jpg",
     nombre: "Limpieza Profunda",
     precio: 8000,
   },
   {
     id: 3,
-    imagen: "sada",
+    imagen: "imagenes/Masaje_de_relax.jpg",
     nombre: "Masaje con piedras calientes",
     precio: 12000,
   },
   {
     id: 4,
-    imagen: "sada",
+    imagen: "imagenes/Masajes_descontracturante.jpg",
     nombre: "Masajes descontracturante",
     precio: 10000,
   },
 ];
 
-// Funcion para validar si la sesion que eligen realmente concide
-function validarCampo() {
-  let sesion = prompt(
-    "Ingrese nombre de la sesion" +
-      "\n" +
-      "1) Higiene facial" +
-      "\n" +
-      "2) Limpieza Profunda" +
-      "\n" +
-      "3) Masaje con piedras calientes" +
-      "\n" +
-      "4) Masajes descontracturante"
-  );
-  let horas = parseInt(prompt("Ingrese cuantas horas quieres"));
+let contenedor = document.getElementById("contenedor");
 
-  if (sesion.trim() === "") {
-    while (sesion.trim() === "") {
-      sesion = prompt(
-        "El campo está vacío. Por favor, ingrese nombre de la sesion"
-      );
-    }
-  } else if (isNaN(horas)) {
-    while (isNaN(horas)) {
-      horas = parseInt(
-        prompt("El campo está vacío. Ingrese cuantas horas quieres")
-      );
-    }
-  }
+ARTICULOS.forEach((articulo) => {
+  let cardHTML = ` 
+        <div class="col-3">
+            <div class="p-3">
+                <div class="card" style="width: 18rem"> 
+                    <img src="${articulo.imagen}" class="card-img-top" alt="" /> 
+                    <div class="card-body"> 
+                        <h5 class="card-title">${articulo.nombre}</h5> 
+                        <p class="card-text"> $ ${articulo.precio} </p> 
+                        <button type="button" class="btn btn-info" onclick="verFecha('${articulo.nombre}', ${articulo.precio})">Reservar</button> 
+                    </div> 
+                </div> 
+            </div>
+        </div> `;
 
-  // busco el nombre del articulo en mi array
-  let articulo = ARTICULOS.find(
-    (item) => item.nombre.toLowerCase() === sesion.toLowerCase() // no importa si esta en mayusucula o minuscula
-  );
+  contenedor.innerHTML += cardHTML;
+});
 
-  // En caso de que se ingrese mal el nombre de la sesion lo vuelve a pedir
-  while (!articulo) {
-    sesion = prompt(
-      "No exite la sesion ingresada. Por favor" +
-        "\n" +
-        "1) Higiene facial" +
-        "\n" +
-        "2) Limpieza Profunda" +
-        "\n" +
-        "3) Masaje con piedras calientes" +
-        "\n" +
-        "4) Masajes descontracturante"
-    );
+// mostrar fecha
 
-    articulo = ARTICULOS.find(
-      (item) => item.nombre.toLowerCase() === sesion.toLowerCase()
-    );
-  }
+function verFecha(nombreSesion, precio) {
+  let fechaYHoraHTML = `
+    <div>
+        <h3> Elije la fecha de la reserva </h3> 
+        <label for="fecha">Elige una fecha:</label> 
+        <input type="date" id="fecha" name="fecha" required> 
+        <br>
+        <label for="hora">Elige una hora:</label> 
+        <input type="time" id="hora" name="hora" required> 
+        <br> 
+        <label for="duracion">Cantidad de horas:</label> 
+        <input type="number" id="duracion" name="duracion" min="1" max="4" required> 
+        <br><br> 
+        <button type="button" class="btn btn-success" onclick="diaDeReserva('${nombreSesion}', ${precio})">Confirmar</button> 
+    </div>
+    `;
 
-  console.log("La sesion elegida es " + sesion + " y durara " + horas + " hs");
-  return { horas, articulo };
-}
-
-// Calculo el costo de la sesion dependiendo cual se elija
-function calcularCosto(total) {
-  // total va a contener las propiedas hora y ARTICULOS
-  if (total) {
-    let suma = total.horas * total.articulo.precio;
-    console.log("El total de la sesion es " + "$" + suma);
-  }
+  document.getElementById("formReserva").innerHTML = fechaYHoraHTML;
 }
 
 // Creo una functio para que elijan la fecha de la reserva
-function diaDeReserva(fechaReserva, horaReserva ) {
-  let reserva = new Date(fechaReserva + 'T' + horaReserva); // paso una cadena unica que incluya el la fecha y hora
-  let fechaActual = new Date();
+function diaDeReserva(nombreSesion, precio) {
+  let fecha = document.getElementById("fecha").value;
+  let hora = document.getElementById("hora").value;
+  let duracion = parseInt(document.getElementById("duracion").value);
 
-  if (reserva >= fechaActual) {
-    return true;
+  if (fecha && hora && duracion > 0 && duracion <= 3) {
+
+    let total = duracion * precio;
+
+    let detalleHTML = `
+        <div>
+            <h3>Reserva Confirmada</h3>
+            <p>Nombre de la seison: ${nombreSesion}</p>
+            <p>fehca: ${fecha}</p>
+            <p>Hora: ${hora}</p>
+            <p>Duracion: ${duracion} horas</p>
+            <p>Total: $${total} </p>
+        </div>
+    `;
+
+    document.getElementById("reservaDetalles").innerHTML = detalleHTML;
   }
 
   return false;
-}
-
-// variables
-let total = validarCampo();
-let fechaReserva = prompt("Ingrese la fecha de la reserva YYYY-MM-DD");
-let horaReserva = prompt("Ingrese la fecha de la reserva HH:MM");
-
-calcularCosto(total);
-
-if (diaDeReserva(fechaReserva, horaReserva)) {
-  console.log("Su reserva seria el dia " + fechaReserva + " a las " + horaReserva);
-} else {
-  console.log(
-    "La fecha ingresada para la reserva es posterior a la fecha del dia, VUELVA A INTENTARLO"
-  );
 }
