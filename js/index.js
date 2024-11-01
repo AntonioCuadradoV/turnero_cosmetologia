@@ -1,5 +1,5 @@
 //Declaro mis objetos
-const ARTICULOS = [
+const ARTICULOS_ARRAY = [
   {
     id: 1,
     imagen: "imagenes/Higiene_facial.jpg",
@@ -26,43 +26,58 @@ const ARTICULOS = [
   },
 ];
 
-let contenedor = document.getElementById("contenedor");
+function verArticulos() {
+  const ARTICULOS_SECT = document.getElementById("articulos");
+  ARTICULOS_ARRAY.forEach((articulo) => {
+    const ARTICULOS_DIV = document.createElement("div");
 
-ARTICULOS.forEach((articulo) => {
-  let cardHTML = ` 
-        <div class="col-3">
-            <div class="p-3">
-                <div class="card" style="width: 18rem"> 
-                    <img src="${articulo.imagen}" class="card-img-top" alt="" /> 
-                    <div class="card-body"> 
-                        <h5 class="card-title">${articulo.nombre}</h5> 
-                        <p class="card-text"> $ ${articulo.precio} </p> 
-                        <button type="button" class="btn btn-info" onclick="verFecha('${articulo.nombre}', ${articulo.precio})">Reservar</button> 
-                    </div> 
-                </div> 
-            </div>
-        </div> `;
+    ARTICULOS_DIV.className = "col-3";
+    ARTICULOS_DIV.innerHTML = ` 
+				<div>
+					<div class="card" style="width: 18rem"> 
+						<img src="${articulo.imagen}" class="card-img-top" alt="" /> 
+						<div class="card-body"> 
+							<h5 class="card-title">${articulo.nombre}</h5> 
+							<p class="card-text"> $ ${articulo.precio} </p> 
+							<button type="button" class="btn btn-info" id="btn_reservar_${articulo.id}">Reservar</button> 
+						</div> 
+					</div> 
+				</div>`;
 
-  contenedor.innerHTML += cardHTML;
-});
+    ARTICULOS_SECT.appendChild(ARTICULOS_DIV);
+
+    document
+      .getElementById(`btn_reservar_${articulo.id}`)
+      .addEventListener("click", () => {
+        verFecha(articulo.nombre, articulo.precio);
+      });
+  });
+}
 
 // mostrar fecha
 
 function verFecha(nombreSesion, precio) {
-  let fechaYHoraHTML = `
-    <div>
-        <h3> Elije la fecha de la reserva </h3> 
-        <label for="fecha">Elige una fecha:</label> 
-        <input type="date" id="fecha" name="fecha" required> 
-        <br>
-        <label for="hora">Elige una hora:</label> 
-        <input type="time" id="hora" name="hora" required> 
-        <br> 
-        <label for="duracion">Cantidad de horas:</label> 
-        <input type="number" id="duracion" name="duracion" min="1" max="4" required> 
-        <br><br> 
-        <button type="button" class="btn btn-success" onclick="diaDeReserva('${nombreSesion}', ${precio})">Confirmar</button> 
-    </div>
+	const fechaYHoraHTML = `
+		
+		<form class="row">
+			<h3> Realiza tu reseva </h3>
+			<div class="col-md-4">
+				<label for="fecha" class="form-label">Elije una fecha:</label>
+				<input type="date" class="form-control" id="fecha" value"fecha" required>
+			</div>
+			<div class="col-md-4">
+				<label for="hora" class="form-label">Elige la hora de la reserva:</label>
+				<input type="time" class="form-control" id="hora" value="hora" required>
+			</div>
+			<div class="col-md-4">
+				<label for="duracion" class="form-label">Cantidad de horas</label>
+				<input type="number" class="form-control" id="duracion" aria-describedby="inputGroupPrepend2" required>
+				</div>
+			</div>
+			<div class="col-12 mt-3">
+				<button type="button" class="btn btn-success" onclick="diaDeReserva('${nombreSesion}', ${precio})">Confirmar</button> 
+			</div>
+		</form>
     `;
 
   document.getElementById("formReserva").innerHTML = fechaYHoraHTML;
@@ -75,18 +90,19 @@ function diaDeReserva(nombreSesion, precio) {
   let duracion = parseInt(document.getElementById("duracion").value);
 
   if (fecha && hora && duracion > 0 && duracion <= 3) {
+    document.getElementById("formReserva").innerHTML = "";
 
     let total = duracion * precio;
 
-    let detalleHTML = `
-        <div>
-            <h3>Reserva Confirmada</h3>
-            <p>Nombre de la seison: ${nombreSesion}</p>
-            <p>fehca: ${fecha}</p>
-            <p>Hora: ${hora}</p>
-            <p>Duracion: ${duracion} horas</p>
-            <p>Total: $${total} </p>
-        </div>
+    const detalleHTML = `
+
+		<div class="row mis_reservas">
+			<div class="col">${nombreSesion}</div>
+			<div class="col">${fecha}</div>
+			<div class="col">${hora}</div>
+			<div class="col">${duracion}</div>
+			<div class="col">$${total}</div>
+		</div>
     `;
 
     document.getElementById("reservaDetalles").innerHTML = detalleHTML;
@@ -94,3 +110,5 @@ function diaDeReserva(nombreSesion, precio) {
 
   return false;
 }
+
+verArticulos();
