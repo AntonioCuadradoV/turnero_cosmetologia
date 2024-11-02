@@ -57,7 +57,7 @@ function verArticulos() {
 // mostrar fecha
 
 function verFecha(nombreSesion, precio) {
-	const fechaYHoraHTML = `
+  const fechaYHoraHTML = `
 		
 		<form class="row">
 			<h3> Realiza tu reseva </h3>
@@ -67,7 +67,7 @@ function verFecha(nombreSesion, precio) {
 			</div>
 			<div class="col-md-4">
 				<label for="hora" class="form-label">Elige la hora de la reserva:</label>
-				<input type="time" class="form-control" id="hora" value="hora" required>
+				<select class="form-control" id="hora" required> ${verificadorDeHoras()} </select>
 			</div>
 			<div class="col-md-4">
 				<label for="duracion" class="form-label">Cantidad de horas</label>
@@ -83,6 +83,20 @@ function verFecha(nombreSesion, precio) {
   document.getElementById("formReserva").innerHTML = fechaYHoraHTML;
 }
 
+function verificadorDeHoras(){
+  let horas = [];
+  for (let i = 9; i < 20; i++){
+    for(let j = 0; j < 60; j += 30){
+      if(i === 20 && j === 30) break;
+      let hora = i < 10 ? `0${i}` : i;
+      let minutos = j < 10 ? `0${j}` : j;
+      horas.push(`<option value = "${hora}:${minutos}" > ${hora}:${minutos} </option>`)
+    }
+  }
+
+  return horas.join('');
+}
+
 // Creo una functio para que elijan la fecha de la reserva
 function diaDeReserva(nombreSesion, precio) {
   let fecha = document.getElementById("fecha").value;
@@ -94,21 +108,35 @@ function diaDeReserva(nombreSesion, precio) {
 
     let total = duracion * precio;
 
-    const detalleHTML = `
+    let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+    let reserva = { nombreSesion, fecha, hora, duracion, total };
+    reservas.push(reserva);
+    localStorage.setItem("reservas", JSON.stringify(reservas));
 
-		<div class="row mis_reservas">
-			<div class="col">${nombreSesion}</div>
-			<div class="col">${fecha}</div>
-			<div class="col">${hora}</div>
-			<div class="col">${duracion}</div>
-			<div class="col">$${total}</div>
-		</div>
-    `;
-
-    document.getElementById("reservaDetalles").innerHTML = detalleHTML;
+    mostrarReserva();
+    document.getElementById("reservaDetalles").innerHTML = "";
+    
   }
 
   return false;
 }
 
+function mostrarReserva() {
+  const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+  const resevaHTML = document.getElementById("reservaDetalles");
+
+  resevaHTML.innerHTML = reservas.map((reserva) => `
+		<div class="row mis_reservas">
+			<div class="col">${reserva.nombreSesion}</div>
+			<div class="col">${reserva.fecha}</div>
+			<div class="col">${reserva.hora}</div>
+			<div class="col">${reserva.duracion}</div>
+			<div class="col">$${reserva.total}</div>
+		</div>
+    `
+    )
+    .join("");
+}
+
 verArticulos();
+mostrarReserva();
