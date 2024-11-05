@@ -26,6 +26,8 @@ const ARTICULOS_ARRAY = [
   },
 ];
 
+let ultimaHoraReservada = null
+
 function verArticulos() {
   const ARTICULOS_SECT = document.getElementById("articulos");
   ARTICULOS_ARRAY.forEach((articulo) => {
@@ -60,7 +62,7 @@ function verFecha(nombreSesion, precio) {
   const fechaYHoraHTML = `
 		
 		<form class="row">
-			<h3> Realiza tu reseva </h3>
+			<h3>Realiza Tu Reseva De ${nombreSesion}</h3>
 			<div class="col-md-4">
 				<label for="fecha" class="form-label">Elije una fecha:</label>
 				<input type="date" class="form-control" id="fecha" value"fecha" required>
@@ -85,9 +87,9 @@ function verFecha(nombreSesion, precio) {
 
 function verificadorDeHoras(){
   let horas = [];
-  for (let i = 9; i < 20; i++){
+  for (let i = 9; i <= 20; i++){
     for(let j = 0; j < 60; j += 30){
-      if(i === 20 && j === 30) break;
+      if(i === 20 && j === 60) break;
       let hora = i < 10 ? `0${i}` : i;
       let minutos = j < 10 ? `0${j}` : j;
       horas.push(`<option value = "${hora}:${minutos}" > ${hora}:${minutos} </option>`)
@@ -124,6 +126,15 @@ function diaDeReserva(nombreSesion, precio) {
 function mostrarReserva() {
   const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
   const resevaHTML = document.getElementById("reservaDetalles");
+  const FECHA_ACTUAL = new Date();
+
+  let controlDeReservas = reservas.filter(reserva => {
+    const [HORAS, MINUTOS] = reserva.hora.split(':');
+    const FECHA_RESERVA = new Date(`${reserva.fecha}T${HORAS}:${MINUTOS}:00`);
+    return FECHA_RESERVA > FECHA_ACTUAL;
+  })
+
+  localStorage.setItem('reservas',JSON.stringify(controlDeReservas));
 
   resevaHTML.innerHTML = reservas.map((reserva) => `
 		<div class="row mis_reservas">
@@ -137,6 +148,7 @@ function mostrarReserva() {
     )
     .join("");
 }
+
 
 verArticulos();
 mostrarReserva();
