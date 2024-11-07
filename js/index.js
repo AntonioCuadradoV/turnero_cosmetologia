@@ -2,25 +2,25 @@
 const ARTICULOS_ARRAY = [
   {
     id: 1,
-    imagen: "imagenes/Higiene_facial.jpg",
+    imagen: "../imagenes/Higiene_facial.jpg",
     nombre: "Higiene facial",
     precio: 6000,
   },
   {
     id: 2,
-    imagen: "imagenes/LIMPIEZA_PROFUNDA.jpg",
+    imagen: "../imagenes/LIMPIEZA_PROFUNDA.jpg",
     nombre: "Limpieza Profunda",
     precio: 8000,
   },
   {
     id: 3,
-    imagen: "imagenes/Masaje_de_relax.jpg",
+    imagen: "../imagenes/Masaje_de_relax.jpg",
     nombre: "Masaje con piedras calientes",
     precio: 12000,
   },
   {
     id: 4,
-    imagen: "imagenes/Masajes_descontracturante.jpg",
+    imagen: "../imagenes/Masajes_descontracturante.jpg",
     nombre: "Masajes descontracturante",
     precio: 10000,
   },
@@ -71,11 +71,6 @@ function verFecha(nombreSesion, precio) {
 				<label for="hora" class="form-label">Elige la hora de la reserva:</label>
 				<select class="form-control" id="hora" required> ${verificadorDeHoras()} </select>
 			</div>
-			<div class="col-md-4">
-				<label for="duracion" class="form-label">Cantidad de horas</label>
-				<input type="number" class="form-control" id="duracion" aria-describedby="inputGroupPrepend2" required>
-				</div>
-			</div>
 			<div class="col-12 mt-3">
 				<button type="button" class="btn btn-success" onclick="diaDeReserva('${nombreSesion}', ${precio})">Confirmar</button> 
 			</div>
@@ -103,7 +98,7 @@ function verificadorDeHoras(){
 function diaDeReserva(nombreSesion, precio) {
   let fecha = document.getElementById("fecha").value;
   let hora = document.getElementById("hora").value;
-  let duracion = parseInt(document.getElementById("duracion").value);
+  let duracion = 1;
 
   if (fecha && hora && duracion > 0 && duracion <= 3) {
     document.getElementById("formReserva").innerHTML = "";
@@ -152,3 +147,4 @@ function mostrarReserva() {
 
 verArticulos();
 mostrarReserva();
+
