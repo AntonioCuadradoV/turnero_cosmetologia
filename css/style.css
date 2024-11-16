@@ -11,6 +11,7 @@
 
 img{
     object-fit: cover;
+    height: 20vh;
 }
 
 .card-body{
