@@ -46,22 +46,25 @@ function verFecha(nombreSesion, precio) {
   const fechaYHoraHTML = `
 		
 		<form class="row">
-			<h3>Realiza Tu Reseva De ${nombreSesion}</h3>
-			<div class="col-md-6">
-				<label for="fecha" class="form-label">Elije una fecha:</label>
-				<input type="date" class="form-control" id="fecha" required>
-			</div>
-			<div class="col-md-6">
-				<label for="hora" class="form-label">Elige la hora de la reserva:</label>
-				<select class="form-control" id="hora" required> ${verificadorDeHoras()} </select>
-			</div>
-			<div class="col-12 mt-3">
-				<button type="button" class="btn btn-success" id="confirmarReserva">Confirmar</button> 
-			</div>
-      <div class="d-flex align-items-center justify-content-center mt-3 d-none" id="spinner">
-        <div class="spinner-border role="status"></div>
-      </div>      
+			<h3>Realiza Tu Reseva</h3>
+      <h5>${nombreSesion}</h5>
+      <div class="containerFecha">
+        <div class="col-md-5">
+          <label for="fecha" class="form-label">Elije una fecha:</label>
+          <input type="date" class="form-control" id="fecha" required>
+        </div>
+        <div class="col-md-5">
+          <label for="hora" class="form-label">Elige la hora de la reserva:</label>
+          <select class="form-control" id="hora" required> ${verificadorDeHoras()} </select>
+        </div>      
+      </div>
 
+      <div class="col-12 mt-3">
+          <button type="button" class="btn btn-success" id="confirmarReserva">Confirmar</button> 
+        </div>
+        <div class="d-flex align-items-center justify-content-center mt-3 d-none" id="spinner">
+          <div class="spinner-border role="status"></div>
+      </div>
 		</form>
     `;
 

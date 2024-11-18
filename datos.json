@@ -3,8 +3,8 @@
 	  "id": 1,
 	  "imagen":
 		"https://beckyclub.com.ar/wp-content/uploads/2023/07/limpieza-facial-profunda-murcia.jpg",
-	  "nombre": "Higiene facial",
-	  "precio": 6000
+	  "nombre": "Higiene facial profunda",
+	  "precio": 15000
 	},
 	{
 	  "id": 2,
@@ -25,6 +25,30 @@
 	  "imagen":
 		"https://www.dan-spa.com/wp-content/uploads/2023/11/masaje-descontracturante-1.webp",
 	  "nombre": "Masajes descontracturante",
-	  "precio": 10000
+	  "precio": 15000
+	},
+	{
+		"id": 5,
+	  	"imagen":"https://cuponassets.cuponatic-latam.com/backendCl/uploads/imagenes_descuentos/328506/c36b76993fe9dcc92a0a78cb5046e5073d387b32.XL2.jpg",
+	  	"nombre": "Higiene facial con radiofrecuencia",
+	  	"precio": 20000
+	},
+	{
+		"id": 6,
+	  	"imagen":"https://belleza.ideal.es/wp-content/uploads/2019/11/depilacion-hilo.jpeg",
+	  	"nombre": "Depilacion de cejas",
+	  	"precio": 8000
+	},
+	{
+		"id": 7,
+	  	"imagen":"https://cdn.shopify.com/s/files/1/1051/6806/files/Fotolia_6656103_Subscription_L_1024x1024.jpg?13335607050985159455",
+	  	"nombre": "Limpieza de cutis con máscara hidratante",
+	  	"precio": 18000
+	},
+	{
+		"id": 8,
+	  	"imagen":"https://sibellaestetica.com/wp-content/uploads/tratamientos-reductores-girona-1.jpg",
+	  	"nombre": "Tratamiento reductor",
+	  	"precio": 15000
 	}
 ]
