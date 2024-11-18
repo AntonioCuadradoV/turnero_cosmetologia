@@ -32,6 +32,8 @@ const ARTICULOS_ARRAY = [
 
 let ultimaHoraReservada = null;
 
+// creo mis cards para visualizar en el index
+
 function verArticulos() {
   const ARTICULOS_SECT = document.getElementById("articulos");
   ARTICULOS_ARRAY.forEach((articulo) => {
@@ -52,32 +54,36 @@ function verArticulos() {
 
     ARTICULOS_SECT.appendChild(ARTICULOS_DIV);
 
-    document
-      .getElementById(`btn_reservar_${articulo.id}`)
-      .addEventListener("click", () => {
+    const botonReserva = document.getElementById(`btn_reservar_${articulo.id}`)
+    
+    botonReserva.addEventListener("click", () => {
         verFecha(articulo.nombre, articulo.precio);
       });
   });
 }
 
-// mostrar fecha
+// muestro las opciones de fecha y hora de reserva que hay disponibles
 
 function verFecha(nombreSesion, precio) {
   const fechaYHoraHTML = `
 		
 		<form class="row">
 			<h3>Realiza Tu Reseva De ${nombreSesion}</h3>
-			<div class="col-md-4">
+			<div class="col-md-6">
 				<label for="fecha" class="form-label">Elije una fecha:</label>
 				<input type="date" class="form-control" id="fecha" required>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-6">
 				<label for="hora" class="form-label">Elige la hora de la reserva:</label>
 				<select class="form-control" id="hora" required> ${verificadorDeHoras()} </select>
 			</div>
 			<div class="col-12 mt-3">
-				<button type="button" class="btn btn-success" onclick="diaDeReserva('${nombreSesion}', ${precio})">Confirmar</button> 
+				<button type="button" class="btn btn-success" id="confirmarReserva">Confirmar</button> 
 			</div>
+      <div class="d-flex align-items-center justify-content-center mt-3 d-none" id="spinner">
+        <div class="spinner-border role="status"></div>
+      </div>      
+
 		</form>
     `;
 
@@ -85,17 +91,37 @@ function verFecha(nombreSesion, precio) {
 
   document.getElementById("fecha").addEventListener("change", () => { 
     document.getElementById("hora").innerHTML = verificadorDeHoras(document.getElementById("fecha").value); 
-    }); 
+  }); 
     
-    document.getElementById("hora").innerHTML = verificadorDeHoras(document.getElementById("fecha").value);
+  document.getElementById("hora").innerHTML = verificadorDeHoras(document.getElementById("fecha").value);
+
+  document.getElementById("confirmarReserva").addEventListener("click", ()=>{
+    mostrarSpinner(nombreSesion, precio)
+  })
+
 }
+
+
+function mostrarSpinner(nombreSesion, precio){
+  const spinner = document.getElementById("spinner");
+  spinner.classList.add("d-flex");
+  spinner.classList.remove('d-none')
+
+  setTimeout(() =>{
+    spinner.classList.add("d-none");
+    spinner.classList.remove('d-flex')
+    diaDeReserva(nombreSesion, precio);
+  }, 3000)
+}
+
+// creo un verificadro de horas para ver si la hora esta reservada que no se muestre y ademas puedas reservar de la hora actual en adelante
 
 function verificadorDeHoras(fechaSeleccionada) {     
 
   let reservas = JSON.parse(localStorage.getItem("reservas")) || []; 
   let horasReservadas = []; 
 
-  // Se añaden horas a la lista de reservadas para la fecha seleccionada 
+  // Se añaden horas a la lista de reservas para la fecha seleccionada 
   reservas.forEach(reserva => { 
     if (reserva.fecha === fechaSeleccionada) { 
       let [horas, minutos] = reserva.hora.split(':'); 
@@ -134,15 +160,18 @@ function diaDeReserva(nombreSesion, precio) {
   let duracion = 1;
 
   if (fecha && hora) {
+    
     const [horas, minutos] = hora.split(":");
-    const fechaReserva = new Date(`${fecha}T${horas}:${minutos}:00`);
-    const fechaActual = new Date();
-
-    if (fechaReserva < fechaActual) {
-      alert(
-        "La hora de la reserva es anterior a la hora actual. Por favor, elige una hora posterior."
-      );
-      return;
+    const fechaReserva = new Date(`${fecha}T${horas}:${minutos}:00`); 
+    const fechaActual = new Date(); 
+    
+    if (fechaReserva < fechaActual) { 
+      const fechaActualAlert = fechaActual.toDateString();
+      swal({
+        icon: "error",
+        text: `La fecha elegida es anterior al dia actual (${fechaActualAlert})`,
+      }); 
+    return;
     }
 
     document.getElementById("formReserva").innerHTML = "";
@@ -155,10 +184,27 @@ function diaDeReserva(nombreSesion, precio) {
     localStorage.setItem("reservas", JSON.stringify(reservas));
 
     mostrarReserva();
+
+    // librerria toasty
+    const botonToasty = document.getElementById("confirmarReserva");
+
+    botonToasty.addEventListener("click", ()=> {
+      Toastify({
+        text: "Reserva Confirmada",
+        className: "btn_toasty",
+        style: {
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+        },
+        position: "left",
+
+      }).showToast();
+    })
   }
 
   return false;
 }
+
+// muestro mis reservas y si ya paso la hora de la resrva se elimina el registro
 
 function mostrarReserva() {
   const reservas = JSON.parse(localStorage.getItem("reservas")) || [];

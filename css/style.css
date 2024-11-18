@@ -49,3 +49,11 @@ img{
 .mis_reservas{
     margin: 20px 0;
 }
+
+.btn_toasty{
+    margin-top: 50px;
+}
+
+.spinner-border{
+    color: rgb(100, 192, 245);
+}
