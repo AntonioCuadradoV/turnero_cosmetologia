@@ -1,0 +1,30 @@
+[
+	{
+	  "id": 1,
+	  "imagen":
+		"https://beckyclub.com.ar/wp-content/uploads/2023/07/limpieza-facial-profunda-murcia.jpg",
+	  "nombre": "Higiene facial",
+	  "precio": 6000
+	},
+	{
+	  "id": 2,
+	  "imagen":
+		"https://www.medicinaesteticacrp.pe/wp-content/uploads/2019/03/limpieza-facial-profunda-procedimiento-3.jpg",
+	  "nombre": "Limpieza Profunda",
+	  "precio": 8000
+	},
+	{
+	  "id": 3,
+	  "imagen":
+		"https://www.spazio26.com/wp-content/uploads/2019/02/Piedras_Calientes.jpg",
+	  "nombre": "Masaje con piedras calientes",
+	  "precio": 12000
+	},
+	{
+	  "id": 4,
+	  "imagen":
+		"https://www.dan-spa.com/wp-content/uploads/2023/11/masaje-descontracturante-1.webp",
+	  "nombre": "Masajes descontracturante",
+	  "precio": 10000
+	}
+]

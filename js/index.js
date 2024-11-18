@@ -1,40 +1,18 @@
-//Declaro mis objetos
-const ARTICULOS_ARRAY = [
-  {
-    id: 1,
-    imagen:
-      "https://beckyclub.com.ar/wp-content/uploads/2023/07/limpieza-facial-profunda-murcia.jpg",
-    nombre: "Higiene facial",
-    precio: 6000,
-  },
-  {
-    id: 2,
-    imagen:
-      "https://www.medicinaesteticacrp.pe/wp-content/uploads/2019/03/limpieza-facial-profunda-procedimiento-3.jpg",
-    nombre: "Limpieza Profunda",
-    precio: 8000,
-  },
-  {
-    id: 3,
-    imagen:
-      "https://www.spazio26.com/wp-content/uploads/2019/02/Piedras_Calientes.jpg",
-    nombre: "Masaje con piedras calientes",
-    precio: 12000,
-  },
-  {
-    id: 4,
-    imagen:
-      "https://www.dan-spa.com/wp-content/uploads/2023/11/masaje-descontracturante-1.webp",
-    nombre: "Masajes descontracturante",
-    precio: 10000,
-  },
-];
-
 let ultimaHoraReservada = null;
+
+//Declaro mis objetos
+async function misArticulos() {
+
+  const response = await fetch('datos.json');
+  const data = await response.json()
+  return data
+}
+
 
 // creo mis cards para visualizar en el index
 
-function verArticulos() {
+async function verArticulos() {
+  const ARTICULOS_ARRAY = await misArticulos()
   const ARTICULOS_SECT = document.getElementById("articulos");
   ARTICULOS_ARRAY.forEach((articulo) => {
     const ARTICULOS_DIV = document.createElement("div");
@@ -116,27 +94,27 @@ function mostrarSpinner(nombreSesion, precio){
 
 // creo un verificadro de horas para ver si la hora esta reservada que no se muestre y ademas puedas reservar de la hora actual en adelante
 
-function verificadorDeHoras(fechaSeleccionada) {     
+function verificadorDeHoras(fechaSeleccionada) {
+  let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+  let horasReservadas = [];
 
-  let reservas = JSON.parse(localStorage.getItem("reservas")) || []; 
-  let horasReservadas = []; 
+  reservas.forEach(reserva => {
+    if (reserva.fecha === fechaSeleccionada) {
+      let [horas, minutos] = reserva.hora.split(':');
+      horasReservadas.push(`${horas}:${minutos}`);
+      let proximaHora = new Date(`1970-01-01T${horas}:${minutos}:00Z`);
+      proximaHora.setMinutes(proximaHora.getMinutes() + 30);
+      horasReservadas.push(`${proximaHora.getUTCHours() < 10 ? '0' : ''}${proximaHora.getUTCHours()}:${proximaHora.getUTCMinutes() < 10 ? '0' : ''}${proximaHora.getUTCMinutes()}`);
+    }
+  });
 
-  // Se añaden horas a la lista de reservas para la fecha seleccionada 
-  reservas.forEach(reserva => { 
-    if (reserva.fecha === fechaSeleccionada) { 
-      let [horas, minutos] = reserva.hora.split(':'); 
-      horasReservadas.push(`${horas}:${minutos}`); 
-      let proximaHora = new Date(`1970-01-01T${horas}:${minutos}:00Z`); 
-      proximaHora.setMinutes(proximaHora.getMinutes() + 30); 
-      horasReservadas.push(`${proximaHora.getUTCHours() < 10 ? '0' : ''}${proximaHora.getUTCHours()}:${proximaHora.getUTCMinutes() < 10 ? '0' : ''}${proximaHora.getUTCMinutes()}`); 
-      } 
-    }); 
-    
-  let horas = []; 
-  const fechaActual = new Date(); 
-  const esDiaActual = fechaSeleccionada === fechaActual.toISOString().split('T')[0]; 
-  const horaActual = esDiaActual ? `${fechaActual.getHours() < 10 ? '0' : ''}${fechaActual.getHours()}:${fechaActual.getMinutes() < 10 ? '0' : ''}${fechaActual.getMinutes()}` : '00:00'; 
-  
+  let horas = [];
+  const fechaActual = new Date();
+  const esDiaActual = fechaSeleccionada === fechaActual.toISOString().split('T')[0];
+  const horaActual = esDiaActual 
+    ? `${fechaActual.getHours() < 10 ? '0' : ''}${fechaActual.getHours()}:${fechaActual.getMinutes() < 10 ? '0' : ''}${fechaActual.getMinutes()}`
+    : '00:00';
+
   for (let i = 9; i <= 20; i++) {
     for (let j = 0; j < 60; j += 30) {
       if (i === 20 && j === 60) break;
@@ -145,13 +123,14 @@ function verificadorDeHoras(fechaSeleccionada) {
       let horaCompleta = `${hora}:${minutos}`;
 
       if (horaCompleta > horaActual && !horasReservadas.includes(horaCompleta)) {
-        horas.push(`<option value="${horaCompleta}">${horaCompleta}</option>`); 
+        horas.push(`<option value="${horaCompleta}">${horaCompleta}</option>`);
       }
     }
   }
 
   return horas.join("");
 }
+
 
 // Creo una functio para que elijan la fecha de la reserva
 function diaDeReserva(nombreSesion, precio) {
@@ -184,25 +163,23 @@ function diaDeReserva(nombreSesion, precio) {
     localStorage.setItem("reservas", JSON.stringify(reservas));
 
     mostrarReserva();
-
+    
     // librerria toasty
-    const botonToasty = document.getElementById("confirmarReserva");
 
-    botonToasty.addEventListener("click", ()=> {
-      Toastify({
-        text: "Reserva Confirmada",
-        className: "btn_toasty",
-        style: {
-          background: "linear-gradient(to right, #00b09b, #96c93d)",
-        },
-        position: "left",
+    Toastify({
+      text: "Reserva Confirmada",
+      className: "btn_toasty",
+      style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+      position: "left",
 
-      }).showToast();
-    })
+    }).showToast();
   }
 
   return false;
 }
+
 
 // muestro mis reservas y si ya paso la hora de la resrva se elimina el registro
 
