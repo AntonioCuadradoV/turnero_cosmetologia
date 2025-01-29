@@ -3,40 +3,41 @@ let ultimaHoraReservada = null;
 //Declaro mis objetos
 async function misArticulos() {
 
-  const response = await fetch('./datos.json');
-  const data = await response.json()
-  return data
+  return fetch('./datos.json')
+    .then(response => response.json())
+    .then(data => data)
+    .catch(error => {
+      console.error('Error al obtener los datos:', error);
+    })
 }
 
 
 // creo mis cards para visualizar en el index
 
-async function verArticulos() {
-  const ARTICULOS_ARRAY = await misArticulos()
-  const ARTICULOS_SECT = document.getElementById("articulos");
-  ARTICULOS_ARRAY.forEach((articulo) => {
-    const ARTICULOS_DIV = document.createElement("div");
+function verArticulos() {
+  misArticulos().then(ARTICULOS_ARRAY => {
+    const ARTICULOS_SECT = document.getElementById("articulos");
+    ARTICULOS_ARRAY.forEach(articulo => {
+      const ARTICULOS_DIV = document.createElement("div");
+      ARTICULOS_DIV.className = "col-3";
+      ARTICULOS_DIV.innerHTML = ` 
+        <div>
+          <div class="card" style="width: 18rem"> 
+            <img src="${articulo.imagen}" class="card-img-top" alt="" /> 
+            <div class="card-body"> 
+              <h5 class="card-title">${articulo.nombre}</h5> 
+              <p class="card-text"> $ ${articulo.precio} </p> 
+              <button type="button" class="btn btn-info" id="btn_reservar_${articulo.id}">Reservar</button> 
+            </div> 
+          </div> 
+        </div>`;
+      ARTICULOS_SECT.appendChild(ARTICULOS_DIV);
 
-    ARTICULOS_DIV.className = "col-3";
-    ARTICULOS_DIV.innerHTML = ` 
-				<div>
-					<div class="card" style="width: 18rem"> 
-						<img src=${articulo.imagen} class="card-img-top" alt="" /> 
-						<div class="card-body"> 
-							<h5 class="card-title">${articulo.nombre}</h5> 
-							<p class="card-text"> $ ${articulo.precio} </p> 
-							<button type="button" class="btn btn-info" id="btn_reservar_${articulo.id}">Reservar</button> 
-						</div> 
-					</div> 
-				</div>`;
-
-    ARTICULOS_SECT.appendChild(ARTICULOS_DIV);
-
-    const botonReserva = document.getElementById(`btn_reservar_${articulo.id}`)
-    
-    botonReserva.addEventListener("click", () => {
+      const botonReserva = document.getElementById(`btn_reservar_${articulo.id}`);
+      botonReserva.addEventListener("click", () => {
         verFecha(articulo.nombre, articulo.precio);
       });
+    });
   });
 }
 
