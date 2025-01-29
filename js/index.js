@@ -3,7 +3,7 @@ let ultimaHoraReservada = null;
 //Declaro mis objetos
 async function misArticulos() {
 
-  const response = await fetch('../datos.json');
+  const response = await fetch('datos.json');
   const data = await response.json()
   return data
 }
