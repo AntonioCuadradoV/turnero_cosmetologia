@@ -2,7 +2,7 @@
 	{
 	  "id": 1,
 	  "imagen":
-		"../imagenes/Higiene_facial.jpg",
+		"imagenes/Higiene_facial.jpg",
 	  "nombre": "Higiene facial profunda",
 	  "precio": 15000
 	},
