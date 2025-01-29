@@ -2,7 +2,7 @@
 	{
 	  "id": 1,
 	  "imagen":
-		"https://beckyclub.com.ar/wp-content/uploads/2023/07/limpieza-facial-profunda-murcia.jpg",
+		"../imagenes/imagenes/Higiene_facial.jpg",
 	  "nombre": "Higiene facial profunda",
 	  "precio": 15000
 	},
